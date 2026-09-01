@@ -15,6 +15,7 @@ class Facture(models.Model):
     date_echeance = models.DateField()
     statut = models.CharField(max_length=20, choices=STATUT_CHOICES, default='brouillon')
     notes = models.TextField(blank=True)
+    date_dernier_rappel = models.DateField(blank=True, null=True, help_text="Date du dernier rappel de paiement envoyé")
     date_creation = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
