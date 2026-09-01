@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.db.models import Sum
 from .models import CompteComptable
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def balance_comptes(request):
     comptes = CompteComptable.objects.all()
     lignes = []
@@ -39,7 +40,7 @@ from .models import CompteComptable, EcritureComptable
 COMPTE_TVA_COLLECTEE = '451000'
 COMPTE_TVA_DEDUCTIBLE = '411100'
 
-
+@login_required
 def rapport_tva(request):
     aujourd_hui = date.today()
     date_debut = request.GET.get('date_debut', date(aujourd_hui.year, aujourd_hui.month, 1).isoformat())

@@ -138,3 +138,7 @@ MON_ENTREPRISE = {
     'iban': 'BE00 0000 0000',
     'email': 'maximevdb1999@gmail.com',
 }
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'

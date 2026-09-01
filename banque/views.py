@@ -6,8 +6,9 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import LigneReleve
 from factures.models import Facture
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def import_releve(request):
     if request.method == 'POST':
         fichier = request.FILES.get('fichier_csv')

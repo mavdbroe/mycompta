@@ -3,8 +3,9 @@ from django.db.models import Sum
 from datetime import date
 from factures.models import Facture
 from depenses.models import Depense
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def tableau_de_bord(request):
     factures_impayees = Facture.objects.exclude(statut__in=['payee', 'annulee'])
     factures_en_retard = [f for f in factures_impayees if f.est_en_retard]
@@ -26,6 +27,7 @@ def tableau_de_bord(request):
         'nb_depenses_mois': depenses_mois.count(),
     })
 
+@login_required
 def documents(request):
     factures = Facture.objects.all().order_by('-date_emission')
     depenses_avec_justificatif = Depense.objects.exclude(justificatif='').order_by('-date_depense')

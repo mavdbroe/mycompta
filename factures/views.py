@@ -4,8 +4,9 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from weasyprint import HTML
 from .models import Facture
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def facture_pdf(request, facture_id):
     facture = get_object_or_404(Facture, id=facture_id)
 
