@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Balance des comptes</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        table { border-collapse: collapse; width: 100%; max-width: 800px; }
+        th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: right; }
+        th, td:first-child, td:nth-child(2) { text-align: left; }
+        th { background-color: #f0f0f0; }
+        tfoot td { font-weight: bold; background-color: #f8f8f8; }
+    </style>
+</head>
+<body>
+    <h1>Balance des comptes</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Numéro</th>
+                <th>Nom</th>
+                <th>Débit</th>
+                <th>Crédit</th>
+                <th>Solde</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ligne in lignes %}
+            <tr>
+                <td>{{ ligne.compte.numero }}</td>
+                <td>{{ ligne.compte.nom }}</td>
+                <td>{{ ligne.debit }} €</td>
+                <td>{{ ligne.credit }} €</td>
+                <td>{{ ligne.solde }} €</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2">Total</td>
+                <td>{{ total_debit }} €</td>
+                <td>{{ total_credit }} €</td>
+                <td>{{ total_solde }} €</td>
+            </tr>
+        </tfoot>
+    </table>
+</body>
+</html>
