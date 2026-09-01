@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'factures',
     'depenses',
     'comptabilite',
+    'banque',
 ]
 
 MIDDLEWARE = [

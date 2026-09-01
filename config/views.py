@@ -25,3 +25,14 @@ def tableau_de_bord(request):
         'total_depenses_mois': total_depenses_mois,
         'nb_depenses_mois': depenses_mois.count(),
     })
+
+def documents(request):
+    factures = Facture.objects.all().order_by('-date_emission')
+    depenses_avec_justificatif = Depense.objects.exclude(justificatif='').order_by('-date_depense')
+    depenses_sans_justificatif = Depense.objects.filter(justificatif='').order_by('-date_depense')
+
+    return render(request, 'documents.html', {
+        'factures': factures,
+        'depenses_avec_justificatif': depenses_avec_justificatif,
+        'depenses_sans_justificatif': depenses_sans_justificatif,
+    })

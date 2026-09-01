@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Documents</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        nav { margin-bottom: 30px; }
+        nav a { margin-right: 15px; }
+        table { border-collapse: collapse; width: 100%; max-width: 900px; margin-bottom: 40px; }
+        th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
+        th { background-color: #f0f0f0; }
+        .manquant { color: #c0392b; }
+        h2 { margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">Tableau de bord</a>
+        <a href="/admin/">Admin</a>
+        <a href="/comptabilite/balance/">Balance</a>
+        <a href="/comptabilite/tva/">Rapport TVA</a>
+        <a href="/banque/import/">Banque</a>
+    </nav>
+
+    <h1>Documents</h1>
+
+    <h2>Factures ({{ factures|length }})</h2>
+    <table>
+        <thead>
+            <tr><th>Numéro</th><th>Client</th><th>Date</th><th>Document</th></tr>
+        </thead>
+        <tbody>
+            {% for facture in factures %}
+            <tr>
+                <td>{{ facture.numero }}</td>
+                <td>{{ facture.client.nom }}</td>
+                <td>{{ facture.date_emission|date:"d/m/Y" }}</td>
+                <td><a href="{% url 'facture_pdf' facture.id %}" target="_blank">Voir PDF</a></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4">Aucune facture</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Justificatifs de dépenses ({{ depenses_avec_justificatif|length }})</h2>
+    <table>
+        <thead>
+            <tr><th>Fournisseur</th><th>Description</th><th>Date</th><th>Document</th></tr>
+        </thead>
+        <tbody>
+            {% for depense in depenses_avec_justificatif %}
+            <tr>
+                <td>{{ depense.fournisseur }}</td>
+                <td>{{ depense.description }}</td>
+                <td>{{ depense.date_depense|date:"d/m/Y" }}</td>
+                <td><a href="{{ depense.justificatif.url }}" target="_blank">Voir le fichier</a></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4">Aucun justificatif</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2 class="manquant">Dépenses sans justificatif ({{ depenses_sans_justificatif|length }})</h2>
+    <table>
+        <thead>
+            <tr><th>Fournisseur</th><th>Description</th><th>Date</th><th>Montant TTC</th></tr>
+        </thead>
+        <tbody>
+            {% for depense in depenses_sans_justificatif %}
+            <tr>
+                <td>{{ depense.fournisseur }}</td>
+                <td>{{ depense.description }}</td>
+                <td>{{ depense.date_depense|date:"d/m/Y" }}</td>
+                <td>{{ depense.montant_ttc|floatformat:2 }} €</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4">Toutes les dépenses ont un justificatif 🎉</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
