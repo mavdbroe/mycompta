@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page { size: A4; margin: 2cm; }
+        body { font-family: Arial, sans-serif; font-size: 11pt; color: #222; }
+        .header { display: flex; justify-content: space-between; margin-bottom: 40px; }
+        .entreprise { font-size: 10pt; }
+        h1 { font-size: 20pt; color: #333; }
+        .infos-facture { margin-bottom: 30px; }
+        .infos-facture td { padding: 2px 10px 2px 0; }
+        table.lignes { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        table.lignes th { background-color: #f0f0f0; text-align: left; padding: 8px; border-bottom: 2px solid #333; }
+        table.lignes td { padding: 8px; border-bottom: 1px solid #ddd; }
+        table.lignes .montant { text-align: right; }
+        .totaux { width: 300px; margin-left: auto; }
+        .totaux td { padding: 4px 10px; }
+        .totaux .montant { text-align: right; }
+        .total-ttc { font-weight: bold; font-size: 13pt; border-top: 2px solid #333; }
+        .footer { margin-top: 60px; font-size: 9pt; color: #777; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="entreprise">
+            <strong>{{ entreprise.nom }}</strong><br>
+            {{ entreprise.adresse }}<br>
+            {{ entreprise.code_postal_ville }}<br>
+            TVA : {{ entreprise.numero_tva }}<br>
+            {{ entreprise.email }}
+        </div>
+        <div>
+            <h1>FACTURE</h1>
+        </div>
+    </div>
+
+    <table class="infos-facture">
+        <tr><td><strong>Numéro :</strong></td><td>{{ facture.numero }}</td></tr>
+        <tr><td><strong>Date d'émission :</strong></td><td>{{ facture.date_emission|date:"d/m/Y" }}</td></tr>
+        <tr><td><strong>Date d'échéance :</strong></td><td>{{ facture.date_echeance|date:"d/m/Y" }}</td></tr>
+        <tr><td><strong>Client :</strong></td><td>
+            {{ facture.client.nom }}<br>
+            {{ facture.client.adresse }}<br>
+            {{ facture.client.code_postal }} {{ facture.client.ville }}<br>
+            {% if facture.client.numero_entreprise %}TVA : {{ facture.client.numero_entreprise }}{% endif %}
+        </td></tr>
+    </table>
+
+    <table class="lignes">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th class="montant">Quantité</th>
+                <th class="montant">Prix unit. HT</th>
+                <th class="montant">TVA</th>
+                <th class="montant">Total HT</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ligne in facture.lignes.all %}
+            <tr>
+                <td>{{ ligne.description }}</td>
+                <td class="montant">{{ ligne.quantite|floatformat:2 }}</td>
+                <td class="montant">{{ ligne.prix_unitaire_ht|floatformat:2 }} €</td>
+                <td class="montant">{{ ligne.taux_tva|floatformat:2 }} %</td>
+                <td class="montant">{{ ligne.total_ht|floatformat:2 }} €</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <table class="totaux">
+        <tr><td>Total HT</td><td class="montant">{{ facture.total_ht|floatformat:2 }} €</td></tr>
+        <tr><td>Total TVA</td><td class="montant">{{ facture.total_tva|floatformat:2 }} €</td></tr>
+        <tr class="total-ttc"><td>Total TTC</td><td class="montant">{{ facture.total_ttc|floatformat:2 }} €</td></tr>
+    </table>
+
+    <div class="footer">
+        À payer avant le {{ facture.date_echeance|date:"d/m/Y" }} sur le compte {{ entreprise.iban }}.<br>
+        Merci pour votre confiance.
+    </div>
+</body>
+</html>

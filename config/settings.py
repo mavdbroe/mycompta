@@ -128,3 +128,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+MON_ENTREPRISE = {
+    'nom': 'Maxime VdB Entreprise',
+    'adresse': 'Rue de la Procession, 72',
+    'code_postal_ville': '1000 Bruxelles',
+    'numero_tva': 'BE0000000000',
+    'iban': 'BE00 0000 0000',
+    'email': 'maximevdb1999@gmail.com',
+}
