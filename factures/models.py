@@ -32,6 +32,11 @@ class Facture(models.Model):
     def total_ttc(self):
         return self.total_ht + self.total_tva
 
+    @property
+    def est_en_retard(self):
+        from datetime import date
+        return self.date_echeance < date.today() and self.statut not in ['payee', 'annulee']
+
 
 class LigneFacture(models.Model):
     facture = models.ForeignKey(Facture, on_delete=models.CASCADE, related_name='lignes')
