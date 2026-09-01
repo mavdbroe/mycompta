@@ -30,3 +30,40 @@ def balance_comptes(request):
         'total_credit': total_credit,
         'total_solde': total_debit - total_credit,
     })
+
+
+from datetime import date
+from django.db.models import Sum
+from .models import CompteComptable, EcritureComptable
+
+COMPTE_TVA_COLLECTEE = '451000'
+COMPTE_TVA_DEDUCTIBLE = '411100'
+
+
+def rapport_tva(request):
+    aujourd_hui = date.today()
+    date_debut = request.GET.get('date_debut', date(aujourd_hui.year, aujourd_hui.month, 1).isoformat())
+    date_fin = request.GET.get('date_fin', aujourd_hui.isoformat())
+
+    ecritures_periode = EcritureComptable.objects.filter(
+        date_ecriture__gte=date_debut,
+        date_ecriture__lte=date_fin,
+    )
+
+    tva_collectee = ecritures_periode.filter(
+        compte_credit__numero=COMPTE_TVA_COLLECTEE
+    ).aggregate(total=Sum('montant'))['total'] or 0
+
+    tva_deductible = ecritures_periode.filter(
+        compte_debit__numero=COMPTE_TVA_DEDUCTIBLE
+    ).aggregate(total=Sum('montant'))['total'] or 0
+
+    tva_a_payer = tva_collectee - tva_deductible
+
+    return render(request, 'comptabilite/rapport_tva.html', {
+        'date_debut': date_debut,
+        'date_fin': date_fin,
+        'tva_collectee': tva_collectee,
+        'tva_deductible': tva_deductible,
+        'tva_a_payer': tva_a_payer,
+    })

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Rapport TVA</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        form { margin-bottom: 30px; }
+        label { margin-right: 8px; }
+        input[type="date"] { margin-right: 20px; }
+        table { border-collapse: collapse; width: 100%; max-width: 500px; }
+        td { border: 1px solid #ccc; padding: 10px 15px; }
+        td:first-child { text-align: left; }
+        td:last-child { text-align: right; }
+        .resultat { font-weight: bold; font-size: 13pt; background-color: #f8f8f8; }
+    </style>
+</head>
+<body>
+    <h1>Rapport TVA</h1>
+
+    <form method="get">
+        <label for="date_debut">Du :</label>
+        <input type="date" id="date_debut" name="date_debut" value="{{ date_debut }}">
+        <label for="date_fin">Au :</label>
+        <input type="date" id="date_fin" name="date_fin" value="{{ date_fin }}">
+        <button type="submit">Calculer</button>
+    </form>
+
+    <table>
+        <tr>
+            <td>TVA collectée (sur ventes)</td>
+            <td>{{ tva_collectee|floatformat:2 }} €</td>
+        </tr>
+        <tr>
+            <td>TVA déductible (sur achats)</td>
+            <td>{{ tva_deductible|floatformat:2 }} €</td>
+        </tr>
+        <tr class="resultat">
+            <td>{% if tva_a_payer >= 0 %}TVA à payer{% else %}TVA à récupérer{% endif %}</td>
+            <td>{{ tva_a_payer|floatformat:2 }} €</td>
+        </tr>
+    </table>
+</body>
+</html>
