@@ -1,39 +1,11 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Documents</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        nav { margin-bottom: 30px; }
-        nav a { margin-right: 15px; }
-        table { border-collapse: collapse; width: 100%; max-width: 900px; margin-bottom: 40px; }
-        th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
-        th { background-color: #f0f0f0; }
-        .manquant { color: #c0392b; }
-        h2 { margin-top: 40px; }
-    </style>
-</head>
-<body>
-    <nav>
-        <a href="/">Tableau de bord</a>
-        <a href="/admin/">Admin</a>
-        <a href="/comptabilite/balance/">Balance</a>
-        <a href="/comptabilite/tva/">Rapport TVA</a>
-        <a href="/banque/import/">Banque</a>
-        <form method="post" action="{% url 'logout' %}" style="display: inline;">
-            {% csrf_token %}
-            <button type="submit" style="border: none; background: none; color: #0066cc; text-decoration: underline; cursor: pointer; font-size: inherit; padding: 0;">Déconnexion</button>
-        </form>
-    </nav>
-
+{% extends 'base.html' %}
+{% block title %}Documents — MyCompta{% endblock %}
+{% block content %}
     <h1>Documents</h1>
 
     <h2>Factures ({{ factures|length }})</h2>
     <table>
-        <thead>
-            <tr><th>Numéro</th><th>Client</th><th>Date</th><th>Document</th></tr>
-        </thead>
+        <thead><tr><th>Numéro</th><th>Client</th><th>Date</th><th>Document</th></tr></thead>
         <tbody>
             {% for facture in factures %}
             <tr>
@@ -50,9 +22,7 @@
 
     <h2>Justificatifs de dépenses ({{ depenses_avec_justificatif|length }})</h2>
     <table>
-        <thead>
-            <tr><th>Fournisseur</th><th>Description</th><th>Date</th><th>Document</th></tr>
-        </thead>
+        <thead><tr><th>Fournisseur</th><th>Description</th><th>Date</th><th>Document</th></tr></thead>
         <tbody>
             {% for depense in depenses_avec_justificatif %}
             <tr>
@@ -69,9 +39,7 @@
 
     <h2 class="manquant">Dépenses sans justificatif ({{ depenses_sans_justificatif|length }})</h2>
     <table>
-        <thead>
-            <tr><th>Fournisseur</th><th>Description</th><th>Date</th><th>Montant TTC</th></tr>
-        </thead>
+        <thead><tr><th>Fournisseur</th><th>Description</th><th>Date</th><th>Montant TTC</th></tr></thead>
         <tbody>
             {% for depense in depenses_sans_justificatif %}
             <tr>
@@ -85,5 +53,4 @@
             {% endfor %}
         </tbody>
     </table>
-</body>
-</html>
+{% endblock %}

@@ -1,50 +1,12 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Import bancaire</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        nav { margin-bottom: 30px; }
-        nav a { margin-right: 15px; }
-        .messages { list-style: none; padding: 0; }
-        .messages li { padding: 10px; margin-bottom: 10px; border-radius: 4px; }
-        .messages .success { background: #d4edda; color: #155724; }
-        .messages .error { background: #f8d7da; color: #721c24; }
-        table { border-collapse: collapse; width: 100%; max-width: 900px; margin-top: 20px; }
-        th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
-        th { background-color: #f0f0f0; }
-        .oui { color: #155724; }
-        .non { color: #999; }
-    </style>
-</head>
-<body>
-    <nav>
-        <a href="/">Tableau de bord</a>
-        <a href="/admin/">Admin</a>
-        <a href="/comptabilite/balance/">Balance</a>
-        <a href="/comptabilite/tva/">Rapport TVA</a>
-        <a href="/documents/">Documents</a>
-        <form method="post" action="{% url 'logout' %}" style="display: inline;">
-            {% csrf_token %}
-            <button type="submit" style="border: none; background: none; color: #0066cc; text-decoration: underline; cursor: pointer; font-size: inherit; padding: 0;">Déconnexion</button>
-        </form>
-    </nav>
-
+{% extends 'base.html' %}
+{% block title %}Import bancaire — MyCompta{% endblock %}
+{% block content %}
     <h1>Import de relevé bancaire</h1>
-
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
 
     <p>Format attendu (CSV, séparateur <code>;</code>) : <code>date;montant;communication</code><br>
     Exemple : <code>15/09/2026;605.00;Paiement facture 2026-001</code></p>
 
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" class="filtre">
         {% csrf_token %}
         <input type="file" name="fichier_csv" accept=".csv" required>
         <button type="submit">Importer</button>
@@ -67,5 +29,4 @@
             {% endfor %}
         </tbody>
     </table>
-</body>
-</html>
+{% endblock %}

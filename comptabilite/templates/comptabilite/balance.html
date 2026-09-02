@@ -1,42 +1,10 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Balance des comptes</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        nav { margin-bottom: 30px; }
-        nav a { margin-right: 15px; }
-        table { border-collapse: collapse; width: 100%; max-width: 800px; }
-        th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: right; }
-        th, td:first-child, td:nth-child(2) { text-align: left; }
-        th { background-color: #f0f0f0; }
-        tfoot td { font-weight: bold; background-color: #f8f8f8; }
-    </style>
-</head>
-<body>
-    <nav>
-        <a href="/">Tableau de bord</a>
-        <a href="/admin/">Admin</a>
-        <a href="/comptabilite/tva/">Rapport TVA</a>
-        <a href="/banque/import/">Banque</a>
-        <a href="/documents/">Documents</a>
-        <form method="post" action="{% url 'logout' %}" style="display: inline;">
-            {% csrf_token %}
-            <button type="submit" style="border: none; background: none; color: #0066cc; text-decoration: underline; cursor: pointer; font-size: inherit; padding: 0;">Déconnexion</button>
-        </form>
-    </nav>
-
+{% extends 'base.html' %}
+{% block title %}Balance — MyCompta{% endblock %}
+{% block content %}
     <h1>Balance des comptes</h1>
     <table>
         <thead>
-            <tr>
-                <th>Numéro</th>
-                <th>Nom</th>
-                <th>Débit</th>
-                <th>Crédit</th>
-                <th>Solde</th>
-            </tr>
+            <tr><th>Numéro</th><th>Nom</th><th>Débit</th><th>Crédit</th><th>Solde</th></tr>
         </thead>
         <tbody>
             {% for ligne in lignes %}
@@ -58,5 +26,4 @@
             </tr>
         </tfoot>
     </table>
-</body>
-</html>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}MyCompta{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header class="topbar">
+        <a href="/" class="logo">MyCompta</a>
+        <nav>
+            <a href="/">Tableau de bord</a>
+            <a href="/admin/">Admin</a>
+            <a href="/comptabilite/balance/">Balance</a>
+            <a href="/comptabilite/tva/">Rapport TVA</a>
+            <a href="/banque/import/">Banque</a>
+            <a href="/documents/">Documents</a>
+        </nav>
+        <form method="post" action="{% url 'logout' %}" class="logout-form">
+            {% csrf_token %}
+            <button type="submit">Déconnexion</button>
+        </form>
+    </header>
+    <main class="content">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
