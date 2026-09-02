@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}Nouvelle facture — MyCompta{% endblock %}
+{% block content %}
+    <h1>Nouvelle facture</h1>
+
+    <form method="post" id="facture-form">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <table class="form-entete">
+            <tr><td><label>Client</label></td><td>{{ form.client }}{{ form.client.errors }}</td></tr>
+            <tr><td><label>Numéro</label></td><td>{{ form.numero }}{{ form.numero.errors }}</td></tr>
+            <tr><td><label>Date d'émission</label></td><td>{{ form.date_emission }}{{ form.date_emission.errors }}</td></tr>
+            <tr><td><label>Date d'échéance</label></td><td>{{ form.date_echeance }}{{ form.date_echeance.errors }}</td></tr>
+            <tr><td><label>Statut</label></td><td>{{ form.statut }}</td></tr>
+            <tr><td><label>Notes</label></td><td>{{ form.notes }}</td></tr>
+        </table>
+
+        <h2>Lignes de facture</h2>
+        {{ formset.management_form }}
+        <table id="lignes-table">
+            <thead>
+                <tr><th>Description</th><th>Quantité</th><th>Prix unit. HT</th><th>TVA %</th><th>Suppr.</th></tr>
+            </thead>
+            <tbody id="lignes-body">
+                {% for ligne_form in formset %}
+                <tr class="ligne-form">
+                    {{ ligne_form.id }}
+                    <td>{{ ligne_form.description }}{{ ligne_form.description.errors }}</td>
+                    <td>{{ ligne_form.quantite }}</td>
+                    <td>{{ ligne_form.prix_unitaire_ht }}</td>
+                    <td>{{ ligne_form.taux_tva }}</td>
+                    <td>{% if ligne_form.instance.pk %}{{ ligne_form.DELETE }}{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="button" id="ajouter-ligne">+ Ajouter une ligne</button>
+
+        <br><br>
+        <button type="submit">Créer la facture</button>
+    </form>
+
+    <template id="ligne-vide-template">
+        <tr class="ligne-form">
+            <td>{{ formset.empty_form.description }}</td>
+            <td>{{ formset.empty_form.quantite }}</td>
+            <td>{{ formset.empty_form.prix_unitaire_ht }}</td>
+            <td>{{ formset.empty_form.taux_tva }}</td>
+            <td></td>
+        </tr>
+    </template>
+
+    <script>
+        document.getElementById('ajouter-ligne').addEventListener('click', function() {
+            const totalForms = document.getElementById('id_lignes-TOTAL_FORMS');
+            const index = parseInt(totalForms.value);
+            const template = document.getElementById('ligne-vide-template').innerHTML;
+            const nouvelleLigne = template.replace(/__prefix__/g, index);
+            document.getElementById('lignes-body').insertAdjacentHTML('beforeend', nouvelleLigne);
+            totalForms.value = index + 1;
+        });
+    </script>
+{% endblock %}

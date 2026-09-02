@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from comptabilite.views import balance_comptes, rapport_tva
-from factures.views import facture_pdf
+from factures.views import facture_pdf, facture_creer
 from config.views import tableau_de_bord, documents
 from banque.views import import_releve
 
@@ -18,6 +18,7 @@ urlpatterns = [
     path('factures/<int:facture_id>/pdf/', facture_pdf, name='facture_pdf'),
     path('banque/import/', import_releve, name='import_releve'),
     path('documents/', documents, name='documents'),
+    path('factures/nouvelle/', facture_creer, name='facture_creer'),
 ]
 
 if settings.DEBUG:

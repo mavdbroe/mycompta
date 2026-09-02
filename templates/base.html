@@ -16,6 +16,9 @@
             <a href="/comptabilite/tva/">Rapport TVA</a>
             <a href="/banque/import/">Banque</a>
             <a href="/documents/">Documents</a>
+            {% if perms.factures.add_facture %}
+            <a href="{% url 'facture_creer' %}">+ Nouvelle facture</a>
+            {% endif %}
         </nav>
         <form method="post" action="{% url 'logout' %}" class="logout-form">
             {% csrf_token %}
