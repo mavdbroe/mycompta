@@ -9,6 +9,9 @@ class LigneReleveAdmin(admin.ModelAdmin):
 
     @admin.action(description="Marquer comme rapprochée et la facture liée comme payée")
     def action_marquer_rapprochee(self, request, queryset):
+        if not request.user.has_perm('banque.change_lignereleve'):
+            self.message_user(request, "Vous n'avez pas la permission d'effectuer cette action.", level=messages.ERROR)
+            return
         nb = 0
         for ligne in queryset:
             ligne.rapprochee = True

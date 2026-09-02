@@ -10,6 +10,9 @@ class DepenseAdmin(admin.ModelAdmin):
 
     @admin.action(description="Générer les écritures comptables")
     def action_generer_ecritures(self, request, queryset):
+        if not request.user.has_perm('depenses.change_depense'):
+                    self.message_user(request, "Vous n'avez pas la permission d'effectuer cette action.", level=messages.ERROR)
+                    return
         succes = 0
         for depense in queryset:
             ok, message = generer_ecritures_depense(depense)

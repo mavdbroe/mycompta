@@ -22,6 +22,9 @@ class FactureAdmin(admin.ModelAdmin):
 
     @admin.action(description="Générer les écritures comptables")
     def action_generer_ecritures(self, request, queryset):
+        if not request.user.has_perm('factures.change_facture'):
+            self.message_user(request, "Vous n'avez pas la permission d'effectuer cette action.", level=messages.ERROR)
+            return
         succes = 0
         for facture in queryset:
             ok, message = generer_ecritures_facture(facture)
@@ -34,10 +37,16 @@ class FactureAdmin(admin.ModelAdmin):
 
     @admin.action(description="Marquer comme payée")
     def action_marquer_payee(self, request, queryset):
+        if not request.user.has_perm('factures.change_facture'):
+            self.message_user(request, "Vous n'avez pas la permission d'effectuer cette action.", level=messages.ERROR)
+            return
         nb = queryset.update(statut='payee')
         self.message_user(request, f"{nb} facture(s) marquée(s) comme payée(s).", level=messages.SUCCESS)
 
     @admin.action(description="Enregistrer un rappel envoyé aujourd'hui")
     def action_enregistrer_rappel(self, request, queryset):
+        if not request.user.has_perm('factures.change_facture'):
+            self.message_user(request, "Vous n'avez pas la permission d'effectuer cette action.", level=messages.ERROR)
+            return
         nb = queryset.update(date_dernier_rappel=date.today())
         self.message_user(request, f"Rappel enregistré pour {nb} facture(s).", level=messages.SUCCESS)

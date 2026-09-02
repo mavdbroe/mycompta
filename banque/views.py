@@ -6,9 +6,9 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import LigneReleve
 from factures.models import Facture
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 
-@login_required
+@permission_required('banque.add_lignereleve', login_url='/accounts/login/')
 def import_releve(request):
     if request.method == 'POST':
         fichier = request.FILES.get('fichier_csv')
