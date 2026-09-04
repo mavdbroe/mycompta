@@ -1,16 +1,24 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
+from rest_framework.routers import DefaultRouter
+from rest_framework.authtoken.views import obtain_auth_token
 from comptabilite.views import balance_comptes, rapport_tva
 from factures.views import facture_pdf, facture_creer
+from factures.api import FactureViewSet
 from config.views import tableau_de_bord, documents
 from banque.views import import_releve
-from clients.views import client_creer, clients_liste
-from depenses.views import depense_creer, depenses_liste
 from clients.views import client_creer, clients_liste, client_detail
+from clients.api import ClientViewSet
+from depenses.views import depense_creer, depenses_liste
+from depenses.api import DepenseViewSet
 
+router = DefaultRouter()
+router.register('clients', ClientViewSet, basename='api-clients')
+router.register('factures', FactureViewSet, basename='api-factures')
+router.register('depenses', DepenseViewSet, basename='api-depenses')
 
 urlpatterns = [
     path('', tableau_de_bord, name='tableau_de_bord'),
@@ -25,9 +33,11 @@ urlpatterns = [
     path('documents/', documents, name='documents'),
     path('clients/', clients_liste, name='clients_liste'),
     path('clients/nouveau/', client_creer, name='client_creer'),
+    path('clients/<int:client_id>/', client_detail, name='client_detail'),
     path('depenses/', depenses_liste, name='depenses_liste'),
     path('depenses/nouvelle/', depense_creer, name='depense_creer'),
-    path('clients/<int:client_id>/', client_detail, name='client_detail'),
+    path('api/', include(router.urls)),
+    path('api/token/', obtain_auth_token, name='api_token'),
 ]
 
 if settings.DEBUG:
