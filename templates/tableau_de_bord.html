@@ -20,6 +20,10 @@
             <div class="valeur">{{ total_depenses_mois|floatformat:2 }} €</div>
             <div class="label">Dépenses ce mois ({{ nb_depenses_mois }})</div>
         </div>
+        <div class="carte">
+            <div class="valeur {% if depenses_a_valider > 0 %}alerte{% endif %}">{{ depenses_a_valider }}</div>
+            <div class="label">Dépense(s) à valider</div>
+        </div>
     </div>
 
     <h2>Factures impayées</h2>

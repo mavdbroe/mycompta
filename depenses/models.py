@@ -18,6 +18,17 @@ class Depense(models.Model):
     justificatif = models.FileField(upload_to='justificatifs/%Y/%m/', blank=True, null=True)
     date_creation = models.DateTimeField(auto_now_add=True)
 
+    STATUT_VALIDATION_CHOICES = [
+        ('a_valider', 'À valider'),
+        ('validee', 'Validée'),
+        ('a_corriger', 'À corriger'),
+    ]
+
+    statut_validation = models.CharField(max_length=20, choices=STATUT_VALIDATION_CHOICES, default='a_valider')
+    commentaire_comptable = models.TextField(blank=True)
+    validee_par = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='depenses_validees')
+    date_validation = models.DateTimeField(blank=True, null=True)
+
     def __str__(self):
         return f"{self.fournisseur} - {self.description}"
 

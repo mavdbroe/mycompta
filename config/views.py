@@ -22,6 +22,8 @@ def tableau_de_bord(request):
 
     exercice_actuel = ExerciceComptable.objects.filter(cloture=False).order_by('annee').first()
 
+    depenses_a_valider = Depense.objects.filter(statut_validation='a_valider').count()
+
     return render(request, 'tableau_de_bord.html', {
         'factures_impayees': factures_impayees,
         'factures_en_retard': factures_en_retard,
@@ -29,6 +31,7 @@ def tableau_de_bord(request):
         'total_depenses_mois': total_depenses_mois,
         'nb_depenses_mois': depenses_mois.count(),
         'exercice_actuel': exercice_actuel,
+        'depenses_a_valider': depenses_a_valider,
     })
 
 @login_required
