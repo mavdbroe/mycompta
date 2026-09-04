@@ -11,14 +11,16 @@
         <a href="/" class="logo">MyCompta</a>
         <nav>
             <a href="/">Tableau de bord</a>
+            <a href="{% url 'clients_liste' %}">Clients</a>
+            <a href="{% url 'depenses_liste' %}">Dépenses</a>
+            {% if perms.factures.add_facture %}
+            <a href="{% url 'facture_creer' %}">+ Facture</a>
+            {% endif %}
             <a href="/admin/">Admin</a>
             <a href="/comptabilite/balance/">Balance</a>
             <a href="/comptabilite/tva/">Rapport TVA</a>
             <a href="/banque/import/">Banque</a>
             <a href="/documents/">Documents</a>
-            {% if perms.factures.add_facture %}
-            <a href="{% url 'facture_creer' %}">+ Nouvelle facture</a>
-            {% endif %}
         </nav>
         <form method="post" action="{% url 'logout' %}" class="logout-form">
             {% csrf_token %}

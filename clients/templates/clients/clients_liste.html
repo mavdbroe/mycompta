@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Clients — MyCompta{% endblock %}
+{% block content %}
+    <h1>Clients</h1>
+    {% if perms.clients.add_client %}
+    <p><a href="{% url 'client_creer' %}">+ Nouveau client</a></p>
+    {% endif %}
+    <table>
+        <thead><tr><th>Nom</th><th>Email</th><th>Téléphone</th><th>Ville</th></tr></thead>
+        <tbody>
+            {% for client in clients %}
+            <tr>
+                <td><a href="{% url 'client_detail' client.id %}">{{ client.nom }}</a></td>
+                <td>{{ client.email|default:"—" }}</td>
+                <td>{{ client.telephone|default:"—" }}</td>
+                <td>{{ client.ville|default:"—" }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4">Aucun client</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

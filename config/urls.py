@@ -7,6 +7,10 @@ from comptabilite.views import balance_comptes, rapport_tva
 from factures.views import facture_pdf, facture_creer
 from config.views import tableau_de_bord, documents
 from banque.views import import_releve
+from clients.views import client_creer, clients_liste
+from depenses.views import depense_creer, depenses_liste
+from clients.views import client_creer, clients_liste, client_detail
+
 
 urlpatterns = [
     path('', tableau_de_bord, name='tableau_de_bord'),
@@ -16,9 +20,14 @@ urlpatterns = [
     path('comptabilite/balance/', balance_comptes, name='balance_comptes'),
     path('comptabilite/tva/', rapport_tva, name='rapport_tva'),
     path('factures/<int:facture_id>/pdf/', facture_pdf, name='facture_pdf'),
+    path('factures/nouvelle/', facture_creer, name='facture_creer'),
     path('banque/import/', import_releve, name='import_releve'),
     path('documents/', documents, name='documents'),
-    path('factures/nouvelle/', facture_creer, name='facture_creer'),
+    path('clients/', clients_liste, name='clients_liste'),
+    path('clients/nouveau/', client_creer, name='client_creer'),
+    path('depenses/', depenses_liste, name='depenses_liste'),
+    path('depenses/nouvelle/', depense_creer, name='depense_creer'),
+    path('clients/<int:client_id>/', client_detail, name='client_detail'),
 ]
 
 if settings.DEBUG:

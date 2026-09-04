@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Dépenses — MyCompta{% endblock %}
+{% block content %}
+    <h1>Dépenses</h1>
+    {% if perms.depenses.add_depense %}
+    <p><a href="{% url 'depense_creer' %}">+ Nouvelle dépense</a></p>
+    {% endif %}
+    <table>
+        <thead><tr><th>Fournisseur</th><th>Description</th><th>Catégorie</th><th>Date</th><th>Total TTC</th></tr></thead>
+        <tbody>
+            {% for depense in depenses %}
+            <tr>
+                <td>{{ depense.fournisseur }}</td>
+                <td>{{ depense.description }}</td>
+                <td>{{ depense.get_categorie_display }}</td>
+                <td>{{ depense.date_depense|date:"d/m/Y" }}</td>
+                <td>{{ depense.montant_ttc|floatformat:2 }} €</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5">Aucune dépense</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

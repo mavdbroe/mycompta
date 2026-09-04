@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Nouveau client — MyCompta{% endblock %}
+{% block content %}
+    <p><a href="{% url 'clients_liste' %}">← Retour à la liste des clients</a></p>
+    <h1>Nouveau client</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <table class="form-entete">
+            {% for champ in form %}
+            <tr><td><label>{{ champ.label }}</label></td><td>{{ champ }}{{ champ.errors }}</td></tr>
+            {% endfor %}
+        </table>
+        <br>
+        <button type="submit">Créer le client</button>
+    </form>
+{% endblock %}

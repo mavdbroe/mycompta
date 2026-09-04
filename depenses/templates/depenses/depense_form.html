@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Nouvelle dépense — MyCompta{% endblock %}
+{% block content %}
+    <p><a href="{% url 'depenses_liste' %}">← Retour à la liste des dépenses</a></p>
+    <h1>Nouvelle dépense</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <table class="form-entete">
+            {% for champ in form %}
+            <tr><td><label>{{ champ.label }}</label></td><td>{{ champ }}{{ champ.errors }}</td></tr>
+            {% endfor %}
+        </table>
+        <br>
+        <button type="submit">Créer la dépense</button>
+    </form>
+{% endblock %}
