@@ -4,6 +4,7 @@ from datetime import date
 from factures.models import Facture
 from depenses.models import Depense
 from django.contrib.auth.decorators import login_required
+from comptabilite.models import ExerciceComptable
 
 @login_required
 def tableau_de_bord(request):
@@ -19,12 +20,15 @@ def tableau_de_bord(request):
     )
     total_depenses_mois = depenses_mois.aggregate(total=Sum('montant_ht'))['total'] or 0
 
+    exercice_actuel = ExerciceComptable.objects.filter(cloture=False).order_by('annee').first()
+
     return render(request, 'tableau_de_bord.html', {
         'factures_impayees': factures_impayees,
         'factures_en_retard': factures_en_retard,
         'total_a_recevoir': total_a_recevoir,
         'total_depenses_mois': total_depenses_mois,
         'nb_depenses_mois': depenses_mois.count(),
+        'exercice_actuel': exercice_actuel,
     })
 
 @login_required

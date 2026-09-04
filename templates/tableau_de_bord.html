@@ -2,7 +2,11 @@
 {% block title %}Tableau de bord — MyCompta{% endblock %}
 {% block content %}
     <h1>Tableau de bord</h1>
-
+        {% if exercice_actuel %}
+        <p style="color: #888; font-size: 9pt;">Exercice en cours : {{ exercice_actuel.annee }} (ouvert)</p>
+        {% else %}
+        <p class="manquant">⚠️ Aucun exercice ouvert — les écritures comptables ne peuvent plus être enregistrées.</p>
+        {% endif %}
     <div class="cartes">
         <div class="carte">
             <div class="valeur">{{ total_a_recevoir|floatformat:2 }} €</div>

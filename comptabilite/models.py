@@ -1,6 +1,7 @@
 from django.db import models
 from factures.models import Facture
 from depenses.models import Depense
+from django.core.exceptions import ValidationError
 
 class CompteComptable(models.Model):
     TYPE_CHOICES = [
@@ -34,5 +35,34 @@ class EcritureComptable(models.Model):
     def __str__(self):
         return f"{self.date_ecriture} - {self.libelle} ({self.montant}€)"
 
+    def clean(self):
+        exercice = ExerciceComptable.objects.filter(
+            date_debut__lte=self.date_ecriture,
+            date_fin__gte=self.date_ecriture,
+        ).first()
+        if exercice and exercice.cloture:
+            raise ValidationError(
+                f"Impossible d'enregistrer cette écriture : l'exercice {exercice.annee} est clôturé."
+            )
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
+
     class Meta:
         ordering = ['-date_ecriture']
+
+
+class ExerciceComptable(models.Model):
+    annee = models.PositiveIntegerField(unique=True)
+    date_debut = models.DateField()
+    date_fin = models.DateField()
+    cloture = models.BooleanField(default=False)
+    date_cloture = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        statut = "Clôturé" if self.cloture else "Ouvert"
+        return f"Exercice {self.annee} ({statut})"
+
+    class Meta:
+        ordering = ['-annee']
