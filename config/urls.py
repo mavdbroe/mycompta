@@ -12,7 +12,7 @@ from config.views import tableau_de_bord, documents
 from banque.views import import_releve
 from clients.views import client_creer, clients_liste, client_detail
 from clients.api import ClientViewSet
-from depenses.views import depense_creer, depenses_liste
+from depenses.views import depense_creer, depenses_liste, enveloppes_liste, enveloppe_export_csv, enveloppe_marquer_envoyee
 from depenses.api import DepenseViewSet
 
 router = DefaultRouter()
@@ -38,6 +38,9 @@ urlpatterns = [
     path('depenses/nouvelle/', depense_creer, name='depense_creer'),
     path('api/', include(router.urls)),
     path('api/token/', obtain_auth_token, name='api_token'),
+    path('depenses/enveloppes/', enveloppes_liste, name='enveloppes_liste'),
+    path('depenses/enveloppes/<int:enveloppe_id>/csv/', enveloppe_export_csv, name='enveloppe_export_csv'),
+    path('depenses/enveloppes/<int:enveloppe_id>/envoyer/', enveloppe_marquer_envoyee, name='enveloppe_marquer_envoyee'),
 ]
 
 if settings.DEBUG:

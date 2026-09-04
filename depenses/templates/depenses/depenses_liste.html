@@ -4,6 +4,7 @@
     <h1>Dépenses</h1>
     {% if perms.depenses.add_depense %}
     <p><a href="{% url 'depense_creer' %}">+ Nouvelle dépense</a></p>
+    <p><a href="{% url 'enveloppes_liste' %}">Enveloppes de paiement</a></p>
     {% endif %}
     <table>
         <thead><tr><th>Fournisseur</th><th>Description</th><th>Catégorie</th><th>Date</th><th>Total TTC</th></tr></thead>

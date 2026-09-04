@@ -1,5 +1,25 @@
 from django.db import models
 
+class EnveloppePaiement(models.Model):
+    STATUT_CHOICES = [
+        ('brouillon', 'Brouillon'),
+        ('envoyee', 'Envoyée à la banque'),
+    ]
+
+    date_creation = models.DateTimeField(auto_now_add=True)
+    date_envoi = models.DateTimeField(blank=True, null=True)
+    statut = models.CharField(max_length=20, choices=STATUT_CHOICES, default='brouillon')
+
+    def __str__(self):
+        return f"Enveloppe #{self.id} ({self.get_statut_display()})"
+
+    @property
+    def total(self):
+        return sum(d.montant_ttc for d in self.depenses.all())
+
+    class Meta:
+        ordering = ['-date_creation']
+
 class Depense(models.Model):
     CATEGORIE_CHOICES = [
         ('fournitures', 'Fournitures de bureau'),
@@ -28,6 +48,8 @@ class Depense(models.Model):
     commentaire_comptable = models.TextField(blank=True)
     validee_par = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='depenses_validees')
     date_validation = models.DateTimeField(blank=True, null=True)
+    enveloppe = models.ForeignKey(EnveloppePaiement, on_delete=models.SET_NULL, null=True, blank=True, related_name='depenses')
+    date_paiement = models.DateField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.fournisseur} - {self.description}"

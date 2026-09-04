@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Enveloppes de paiement — MyCompta{% endblock %}
+{% block content %}
+    <p><a href="{% url 'depenses_liste' %}">← Retour aux dépenses</a></p>
+    <h1>Enveloppes de paiement</h1>
+
+    <h2>Dépenses validées à payer ({{ depenses_a_payer|length }})</h2>
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            <thead>
+                <tr><th></th><th>Fournisseur</th><th>Description</th><th>Date</th><th>Montant TTC</th></tr>
+            </thead>
+            <tbody>
+                {% for depense in depenses_a_payer %}
+                <tr>
+                    <td><input type="checkbox" name="depenses" value="{{ depense.id }}"></td>
+                    <td>{{ depense.fournisseur }}</td>
+                    <td>{{ depense.description }}</td>
+                    <td>{{ depense.date_depense|date:"d/m/Y" }}</td>
+                    <td>{{ depense.montant_ttc|floatformat:2 }} €</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="5">Aucune dépense en attente de paiement</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit">Créer une enveloppe avec la sélection</button>
+    </form>
+
+    <h2>Enveloppes existantes</h2>
+    <table>
+        <thead>
+            <tr><th>Numéro</th><th>Statut</th><th>Nb dépenses</th><th>Total</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+            {% for enveloppe in enveloppes %}
+            <tr>
+                <td>#{{ enveloppe.id }}</td>
+                <td>{{ enveloppe.get_statut_display }}</td>
+                <td>{{ enveloppe.depenses.count }}</td>
+                <td>{{ enveloppe.total|floatformat:2 }} €</td>
+                <td>
+                    <a href="{% url 'enveloppe_export_csv' enveloppe.id %}">Télécharger CSV</a>
+                    {% if enveloppe.statut == 'brouillon' %}
+                    | <a href="{% url 'enveloppe_marquer_envoyee' enveloppe.id %}">Marquer envoyée</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5">Aucune enveloppe</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
